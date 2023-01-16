@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/request_fragment">
+
+
+
+<!--    <fragment-->
+<!--        android:id="@+id/request_fragment"-->
+<!--        android:label="Request fragment"-->
+<!--        tools:layout="@layout/request_fragment">-->
+<!--        <action-->
+<!--            android:id="@+id/action_fragment1_to_fragment2"-->
+<!--            app:destination="@id/fragment2"-->
+<!--            />-->
+<!--    </fragment>-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/fragment2"-->
+<!--        android:label="fragment2"-->
+<!--        tools:layout="@layout/fragment2">-->
+<!--    </fragment>-->
+
+    <fragment
+        android:id="@+id/request_fragment"
+        android:name="com.yaroslavm.cft.BinInfoRequestFragment"
+        android:label="RequestFragment"
+        tools:layout="@layout/bin_info_request_fragment">
+        <action
+            android:id="@+id/action_request_fragment_to_fragment2"
+            app:destination="@id/fragment2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment2"
+        android:name="com.yaroslavm.cft.BinlistResponseFragment"
+        android:label="Fragment2"
+        tools:layout="@layout/bin_info_response_fragment"/>
+</navigation>

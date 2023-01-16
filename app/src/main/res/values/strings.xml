@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">CftTestTask</string>
+
+    <string name="enter_bin">Enter the first digits of a card number (BIN/IIN)</string>
+
+    <string name="card_scheme">SCHEME / NETWORK</string>
+    <string name="card_type">TYPE</string>
+    <string name="card_brand">BRAND</string>
+    <string name="is_card_prepaid">PREPAID</string>
+    <string name="card_number">CARD NUMBER</string>
+    <string name="card_number_length">LENGTH</string>
+    <string name="card_number_lunh">LUHN</string>
+    <string name="card_origin_country">COUNTRY</string>
+    <string name="card_origin_latitude">latitude</string>
+    <string name="card_origin_longitude">longitude</string>
+    <string name="card_issuer">BANK</string>
+
+</resources>
