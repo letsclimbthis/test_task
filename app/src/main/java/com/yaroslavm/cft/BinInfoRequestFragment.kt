@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -20,7 +21,7 @@ class BinInfoRequestFragment:
     View.OnClickListener
 {
 
-    val binInfoViewModel: BinInfoViewModel by viewModels()
+    val binInfoViewModel: BinInfoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,21 +34,7 @@ class BinInfoRequestFragment:
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycleScope.launch {
-            // TODO: consider what to use `collectOnLifecycle` or `repeatOnLifecycle`
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                binInfoViewModel.requestFragmentUiStateFlow.collect {
-
-                    when (it) {
-                        is RequestFragmentUiState.Loaded -> {
-                            Toast.makeText(requireContext(), it.data.country?.name, Toast.LENGTH_SHORT).show()
-                        }
-                        else -> {}
-                    }
-                }
-            }
-        }
+        onBinInfoRequestUiStateChanged()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,19 +50,37 @@ class BinInfoRequestFragment:
 
     override fun onClick(p0: View?) {
         when (p0?.tag) {
+
             "request_fragment_button_send_request" -> {
-
                 binInfoViewModel.fetchBinInfo("45717360")
-
-//                val navController = findNavController(this)
-//                navController.navigate(R.id.action_request_fragment_to_fragment2)
             }
         }
     }
 
+    private fun onBinInfoRequestUiStateChanged() {
+        val navController = findNavController(this)
 
-//    private val viewModel: NewsViewModel by viewModels()
-//
+        lifecycleScope.launch {
+            // TODO: consider what to use `collectOnLifecycle` or `repeatOnLifecycle`
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
 
+                binInfoViewModel.binInfoRequestUiStateFlow.collect {
+                    when (it) {
+
+                        is BinInfoRequestUiState.Initial -> { }
+
+                        is BinInfoRequestUiState.Loading -> { }
+
+                        is BinInfoRequestUiState.Loaded -> {
+                            navController.navigate(R.id.action_bin_info_request_fragment_to_bin_info_response_fragment)
+                            Toast.makeText(requireContext(), it.data.country?.name, Toast.LENGTH_SHORT).show()
+                        }
+
+                        is BinInfoRequestUiState.Error -> { }
+                    }
+                }
+            }
+        }
+    }
 
 }

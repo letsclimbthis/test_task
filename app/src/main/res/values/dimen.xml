@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="padding_around_content_area">24dp</dimen>
+    <dimen name="padding_between_items">20dp</dimen>
+    <dimen name="padding_between_title_and_subtitle">8dp</dimen>
+    <dimen name="padding_between_title_and_body">8dp</dimen>
+
+    <dimen name="text_view_height">28dp</dimen>
+    <dimen name="text_view_width">150dp</dimen>
+    <dimen name="text_view_half_width">71dp</dimen>
+
+    <dimen name="text_view_margin_horizontal">16dp</dimen>
+    <dimen name="text_view_margin_vertical">16dp</dimen>
+
+</resources>

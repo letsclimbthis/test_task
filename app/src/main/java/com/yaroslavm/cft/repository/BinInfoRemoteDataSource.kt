@@ -10,7 +10,7 @@ class BinInfoRemoteDataSource @Inject constructor(
 ) : RemoteDataSource<BinEntity,BinlistResponse> {
 
     override suspend fun get(entity: BinEntity): Flow<BinlistResponse> = flow {
-//        binlistLocalDataSource.saveBin(bin)
+//        binInfoLocalDataSource.saveBin(bin)
         emit(binInfoService.get(entity.value))
     }
 

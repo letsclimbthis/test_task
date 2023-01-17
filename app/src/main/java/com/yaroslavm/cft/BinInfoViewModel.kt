@@ -17,31 +17,32 @@ class BinInfoViewModel @Inject constructor(
     private val binEntityInfoRepository: Repository<BinEntity,BinlistResponse>
     ): ViewModel() {
 
-    private val _requestFragmentUiStateFlow = MutableStateFlow<RequestFragmentUiState>(RequestFragmentUiState.Initial)
-    val requestFragmentUiStateFlow = _requestFragmentUiStateFlow.asStateFlow()
+    private val _binInfoRequestUiStateFlow = MutableStateFlow<BinInfoRequestUiState>(BinInfoRequestUiState.Initial)
+    val binInfoRequestUiStateFlow = _binInfoRequestUiStateFlow.asStateFlow()
 
     private var fetchBinInfo: Job? = null
 
     fun fetchBinInfo(bin: String) {
 
-        _requestFragmentUiStateFlow.value = RequestFragmentUiState.Loading
+        _binInfoRequestUiStateFlow.value = BinInfoRequestUiState.Loading
 
         fetchBinInfo?.cancel()
         fetchBinInfo = viewModelScope.launch {
-
             try {
                 val binlistResponse = binEntityInfoRepository.get1(BinEntity(bin))
-                _requestFragmentUiStateFlow.update {
-                    RequestFragmentUiState.Loaded(data = binlistResponse)
+                _binInfoRequestUiStateFlow.update {
+                    BinInfoRequestUiState.Loaded(data = binlistResponse)
                 }
-
             } catch (ioe: IOException) {
-                _requestFragmentUiStateFlow.update {
-                    RequestFragmentUiState.Error(message = ioe.message!!)
+                _binInfoRequestUiStateFlow.update {
+                    BinInfoRequestUiState.Error(message = ioe.message!!)
                 }
             }
         }
     }
 
+    fun setBinInfoRequestUiStateAsInitial() {
+        _binInfoRequestUiStateFlow.value = BinInfoRequestUiState.Initial
+    }
 
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="text_view_root" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">@dimen/text_view_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <!-- title text view root -->
+    <style name="text_view_title" parent="text_view_root">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:textColor">@color/grey_60</item>
+    </style>
+    <style name="text_view_subtitle" parent="text_view_title">
+        <item name="android:textSize">10sp</item>
+        <item name="android:layout_width">@dimen/text_view_half_width</item>
+    </style>
+    <!-- title text view top -->
+    <style name="text_view_title_start_top" parent="text_view_title">
+        <item name="android:layout_marginTop">@dimen/padding_around_content_area</item>
+    </style>
+    <!-- title text view middle -->
+    <style name="text_view_title_middle" parent="text_view_root">
+        <item name="android:layout_marginTop">@dimen/padding_between_items</item>
+    </style>
+    <style name="text_view_subtitle_middle" parent="text_view_subtitle">
+        <item name="android:layout_marginTop">@dimen/padding_between_title_and_subtitle</item>
+    </style>
+    <style name="text_view_subtitle_middle_wrap" parent="text_view_subtitle_middle">
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <!-- body text view root -->
+    <style name="text_view_body" parent="text_view_root">
+        <item name="android:layout_marginTop">@dimen/padding_between_title_and_body</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
+        <item name="android:textColor">@color/grey_100</item>
+        <item name="android:text">@string/no_info</item>
+
+    </style>
+    <!-- body text view middle -->
+    <style name="text_view_body_middle" parent="text_view_body">
+    </style>
+    <style name="text_view_body_middle_short" parent="text_view_body_middle">
+        <item name="android:layout_width">@dimen/text_view_half_width</item>
+    </style>
+    <style name="text_view_body_middle_wrap" parent="text_view_body_middle">
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+    <style name="text_view_sub_body_middle" parent="text_view_body_middle_wrap">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+</resources>

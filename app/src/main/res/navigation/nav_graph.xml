@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/request_fragment">
+    app:startDestination="@id/bin_info_request_fragment">
 
 
 
@@ -24,18 +24,18 @@
 <!--    </fragment>-->
 
     <fragment
-        android:id="@+id/request_fragment"
+        android:id="@+id/bin_info_request_fragment"
         android:name="com.yaroslavm.cft.BinInfoRequestFragment"
-        android:label="RequestFragment"
+        android:label="BinInfoRequestFragment"
         tools:layout="@layout/bin_info_request_fragment">
         <action
-            android:id="@+id/action_request_fragment_to_fragment2"
-            app:destination="@id/fragment2" />
+            android:id="@+id/action_bin_info_request_fragment_to_bin_info_response_fragment"
+            app:destination="@id/bin_info_response_fragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/fragment2"
+        android:id="@+id/bin_info_response_fragment"
         android:name="com.yaroslavm.cft.BinlistResponseFragment"
-        android:label="Fragment2"
+        android:label="BinInfoResponseFragment"
         tools:layout="@layout/bin_info_response_fragment"/>
 </navigation>
