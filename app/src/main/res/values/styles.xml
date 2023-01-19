@@ -4,28 +4,30 @@
     <style name="text_view_root" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">@dimen/text_view_width</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 
     <!-- title text view root -->
     <style name="text_view_title" parent="text_view_root">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:textSize">@dimen/text_bigger</item>
         <item name="android:textColor">@color/grey_60</item>
     </style>
     <style name="text_view_subtitle" parent="text_view_title">
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">@dimen/text_smaller</item>
         <item name="android:layout_width">@dimen/text_view_half_width</item>
     </style>
     <!-- title text view top -->
     <style name="text_view_title_start_top" parent="text_view_title">
-        <item name="android:layout_marginTop">@dimen/padding_around_content_area</item>
+        <item name="android:layout_marginTop">@dimen/padding_into_content_area</item>
+        <item name="android:layout_marginStart">@dimen/padding_into_content_area</item>
     </style>
     <!-- title text view middle -->
-    <style name="text_view_title_middle" parent="text_view_root">
-        <item name="android:layout_marginTop">@dimen/padding_between_items</item>
+    <style name="text_view_title_middle" parent="text_view_title">
+        <item name="android:layout_marginTop">@dimen/spacing_between_items</item>
     </style>
     <style name="text_view_subtitle_middle" parent="text_view_subtitle">
-        <item name="android:layout_marginTop">@dimen/padding_between_title_and_subtitle</item>
+        <item name="android:layout_marginTop">@dimen/spacing_between_title_and_subtitle</item>
     </style>
     <style name="text_view_subtitle_middle_wrap" parent="text_view_subtitle_middle">
         <item name="android:layout_width">wrap_content</item>
@@ -33,11 +35,16 @@
 
     <!-- body text view root -->
     <style name="text_view_body" parent="text_view_root">
-        <item name="android:layout_marginTop">@dimen/padding_between_title_and_body</item>
+        <item name="android:layout_marginTop">@dimen/spacing_between_title_and_body</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
         <item name="android:textColor">@color/grey_100</item>
         <item name="android:text">@string/no_info</item>
+        <item name="android:textSize">@dimen/text_bigger</item>
+    </style>
 
+    <style name="text_view_body_top" parent="text_view_body">
+        <item name="android:layout_marginTop">@dimen/padding_into_content_area</item>
+        <item name="android:layout_marginStart">@dimen/spacing_between_title_and_body</item>
     </style>
     <!-- body text view middle -->
     <style name="text_view_body_middle" parent="text_view_body">
@@ -49,7 +56,8 @@
         <item name="android:layout_width">wrap_content</item>
     </style>
     <style name="text_view_sub_body_middle" parent="text_view_body_middle_wrap">
-        <item name="android:textSize">10sp</item>
+        <item name="android:layout_marginStart">@dimen/spacing_xmedium</item>
+        <item name="android:textSize">@dimen/text_smaller</item>
     </style>
 
 </resources>

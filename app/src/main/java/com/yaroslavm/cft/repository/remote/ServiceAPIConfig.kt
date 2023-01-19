@@ -1,4 +1,4 @@
-package com.yaroslavm.cft.repository
+package com.yaroslavm.cft.repository.remote
 
 object ServiceAPIConfig {
 

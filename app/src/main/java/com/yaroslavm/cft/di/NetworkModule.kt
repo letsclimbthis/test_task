@@ -3,6 +3,7 @@ package com.yaroslavm.cft.di
 import com.google.gson.Gson
 import com.yaroslavm.cft.BinEntity
 import com.yaroslavm.cft.repository.*
+import com.yaroslavm.cft.repository.remote.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,6 +46,6 @@ object NetworkModule {
     @Singleton
     fun bindBinInfoRemoteDataSource(
         binInfoService: BinInfoService
-    ): RemoteDataSource<BinEntity,BinlistResponse> = BinInfoRemoteDataSource(binInfoService)
+    ): RemoteDataSource<BinEntity, BinlistResponse> = BinInfoRemoteDataSource(binInfoService)
 
 }

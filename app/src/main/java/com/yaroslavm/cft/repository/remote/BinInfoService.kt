@@ -1,4 +1,4 @@
-package com.yaroslavm.cft.repository
+package com.yaroslavm.cft.repository.remote
 
 import retrofit2.http.GET
 import retrofit2.http.Path

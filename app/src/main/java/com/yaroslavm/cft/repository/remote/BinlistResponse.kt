@@ -1,6 +1,7 @@
-package com.yaroslavm.cft.repository
+package com.yaroslavm.cft.repository.remote
 
 import com.google.gson.annotations.SerializedName
+import kotlin.reflect.KMutableProperty
 
 data class BinlistResponse(
     @SerializedName("number") var number: Number? = null,

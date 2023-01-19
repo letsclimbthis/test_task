@@ -2,6 +2,8 @@ package com.yaroslavm.cft.di
 
 import com.yaroslavm.cft.BinEntity
 import com.yaroslavm.cft.repository.*
+import com.yaroslavm.cft.repository.remote.BinInfoRemoteDataSource
+import com.yaroslavm.cft.repository.remote.BinlistResponse
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,5 +19,5 @@ object RepositoryModule {
     @ViewModelScoped
     fun provideBinInfoRepository(
         binInfoRemoteDataSource: BinInfoRemoteDataSource
-    ): Repository<BinEntity,BinlistResponse> = BinInfoRepository(binInfoRemoteDataSource)
+    ): Repository<BinEntity, BinlistResponse> = BinInfoRepository(binInfoRemoteDataSource)
 }

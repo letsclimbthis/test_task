@@ -1,4 +1,4 @@
-package com.yaroslavm.cft
+package com.yaroslavm.cft.di
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

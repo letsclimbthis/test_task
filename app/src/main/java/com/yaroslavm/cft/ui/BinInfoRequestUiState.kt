@@ -1,6 +1,6 @@
-package com.yaroslavm.cft
+package com.yaroslavm.cft.ui
 
-import com.yaroslavm.cft.repository.BinlistResponse
+import com.yaroslavm.cft.repository.remote.BinlistResponse
 
 sealed class BinInfoRequestUiState {
     object Initial: BinInfoRequestUiState()

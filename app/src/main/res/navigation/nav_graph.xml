@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/bin_info_request_fragment"
-        android:name="com.yaroslavm.cft.BinInfoRequestFragment"
+        android:name="com.yaroslavm.cft.ui.request.BinInfoRequestFragment"
         android:label="BinInfoRequestFragment"
         tools:layout="@layout/bin_info_request_fragment">
         <action
@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/bin_info_response_fragment"
-        android:name="com.yaroslavm.cft.BinlistResponseFragment"
+        android:name="com.yaroslavm.cft.ui.response.BinInfoResponseFragment"
         android:label="BinInfoResponseFragment"
         tools:layout="@layout/bin_info_response_fragment"/>
 </navigation>
