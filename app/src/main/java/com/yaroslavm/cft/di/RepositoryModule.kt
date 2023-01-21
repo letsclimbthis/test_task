@@ -1,6 +1,6 @@
 package com.yaroslavm.cft.di
 
-import com.yaroslavm.cft.BinEntity
+import com.yaroslavm.cft.BinRequest
 import com.yaroslavm.cft.repository.*
 import com.yaroslavm.cft.repository.remote.BinInfoRemoteDataSource
 import com.yaroslavm.cft.repository.remote.BinlistResponse
@@ -19,5 +19,5 @@ object RepositoryModule {
     @ViewModelScoped
     fun provideBinInfoRepository(
         binInfoRemoteDataSource: BinInfoRemoteDataSource
-    ): Repository<BinEntity, BinlistResponse> = BinInfoRepository(binInfoRemoteDataSource)
+    ): Repository<BinRequest, BinlistResponse> = BinInfoRepository(binInfoRemoteDataSource)
 }

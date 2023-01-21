@@ -4,14 +4,18 @@
     <dimen name="spacing_medium">5dp</dimen>
     <dimen name="spacing_xmedium">8dp</dimen>
     <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_smlarge">18dp</dimen>
     <dimen name="spacing_mlarge">20dp</dimen>
     <dimen name="spacing_mxlarge">24dp</dimen>
+    <dimen name="spacing_mxxlarge">35dp</dimen>
+    <dimen name="spacing_xmlarge">40dp</dimen>
+    <dimen name="spacing_xxlarge">50dp</dimen>
 
     <dimen name="spacing_around_content_area">@dimen/spacing_xmedium</dimen>
     <dimen name="padding_into_content_area">@dimen/spacing_mlarge</dimen>
     <dimen name="spacing_between_items">@dimen/spacing_large</dimen>
-    <dimen name="spacing_between_title_and_subtitle">@dimen/spacing_xmedium</dimen>
-    <dimen name="spacing_between_title_and_body">@dimen/spacing_xmedium</dimen>
+    <dimen name="spacing_between_title_and_subtitle">@dimen/spacing_medium</dimen>
+    <dimen name="spacing_between_title_and_body">@dimen/spacing_medium</dimen>
 
     <dimen name="text_view_height">28dp</dimen>
     <dimen name="text_view_width">150dp</dimen>

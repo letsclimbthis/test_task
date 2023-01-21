@@ -11,10 +11,10 @@
             />
         <variable
             name="clickHandler"
-            type="com.yaroslavm.cft.ui.response.BinInfoResponseFragment" />
+            type="android.view.View.OnClickListener" />
         <variable
-            name="binEntity"
-            type="com.yaroslavm.cft.BinEntity" />
+            name="binRequest"
+            type="com.yaroslavm.cft.BinRequest" />
     </data>
 
     <ScrollView
@@ -54,7 +54,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/text_view_title"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="@{binEntity.component1()}"
+                    android:text="@{binRequest.component1()}"
                     tools:text="123456"/>
 
                 <TextView

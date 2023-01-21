@@ -8,7 +8,6 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.widget.TooltipCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,7 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.yaroslavm.cft.R
 import com.yaroslavm.cft.databinding.BinInfoResponseFragmentBinding
-import com.yaroslavm.cft.ui.BinInfoRequestUiState
+import com.yaroslavm.cft.ui.request.BinInfoRequestUiState
 import com.yaroslavm.cft.ui.BinInfoViewModel
 import kotlinx.coroutines.launch
 
@@ -29,7 +28,7 @@ class BinInfoResponseFragment:
 {
 
     private val binInfoViewModel: BinInfoViewModel by activityViewModels()
-    private var binding: BinInfoResponseFragmentBinding? = null
+    private lateinit var binding: BinInfoResponseFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,14 +41,14 @@ class BinInfoResponseFragment:
             container,
             false
         )
-        binding?.clickHandler = this
-        return binding!!.root
+        binding.clickHandler = this
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeOnBinInfoUiStateChanged()
-        subscribeOnBinEntityChanged()
+        subscribeOnBinRequestChanged()
         registerOnBackPressedCallback()
     }
 
@@ -59,40 +58,25 @@ class BinInfoResponseFragment:
                 binInfoViewModel.binInfoRequestUiStateFlow.collect {
                     when (it) {
                         is BinInfoRequestUiState.Initial -> { }
-                        is BinInfoRequestUiState.Loading -> { }
-                        is BinInfoRequestUiState.Loaded -> { binding?.response = it.data }
+                        is BinInfoRequestUiState.BinInfoLoading -> { }
+                        is BinInfoRequestUiState.BinInfoLoaded -> { binding.response = it.data }
                         is BinInfoRequestUiState.Error -> { }
+                        else -> {}
                     }
                 }
             }
         }
     }
 
-    private fun subscribeOnBinEntityChanged() {
+    private fun subscribeOnBinRequestChanged() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                binInfoViewModel.binEntityStateFlow.collect {
-                    binding?.binEntity = it
+                binInfoViewModel.binRequestFlow.collect {
+                    binding.binRequest = it
                 }
             }
         }
     }
-
-//    private fun registerClickListenerForViews() {
-//        val listener = this
-//        binding?.apply {
-//            listOf(
-//                textViewBankNameBody,
-//                textViewBankTelNumberBody,
-//                textViewBankWebsiteBody,
-////                textViewCountryBody,
-////                textViewCountryBodyLatitude,
-////                textViewCountryBodyLongitude
-//            ).forEach {
-//                it.setOnClickListener(listener)
-//            }
-//        }
-//    }
 
     private fun registerOnBackPressedCallback() {
         requireActivity()
@@ -134,7 +118,7 @@ class BinInfoResponseFragment:
 
     private fun viewGeoAtMap() {
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            val geo = "${binding?.textViewCountryBodyLatitude?.text.toString()},${binding?.textViewCountryBodyLongitude?.text.toString()}"
+            val geo = "${binding.textViewCountryBodyLatitude.text},${binding.textViewCountryBodyLongitude.text}"
             data = Uri.parse("geo:=${geo}")
         }
         if (intent.resolveActivity(requireActivity().packageManager) != null)
@@ -142,7 +126,7 @@ class BinInfoResponseFragment:
     }
 
     private fun visitWebsite() {
-        val webpage: Uri = Uri.parse(" http://${binding?.textViewBankWebsiteBody?.text.toString()}/")
+        val webpage: Uri = Uri.parse(" http://${binding.textViewBankWebsiteBody.text}/")
         val intent = Intent(Intent.ACTION_VIEW, webpage)
         if (intent.resolveActivity(requireActivity().packageManager) != null)
             context?.startActivity(intent)
@@ -150,14 +134,10 @@ class BinInfoResponseFragment:
 
     private fun makeACall() {
         val intent = Intent(Intent.ACTION_DIAL).apply {
-            data = Uri.parse("tel:${binding?.textViewBankTelNumberBody?.text.toString()}")
+            data = Uri.parse("tel:${binding.textViewBankTelNumberBody.text}")
         }
         if (intent.resolveActivity(requireActivity().packageManager) != null)
             context?.startActivity(intent)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
 }

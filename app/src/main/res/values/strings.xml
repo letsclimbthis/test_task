@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CftTestTask</string>
 
-    <string name="enter_bin">Enter the first digits of a card number (BIN/IIN)</string>
+    <string name="enter_bin">Enter card BIN / IIN</string>
 
     <string name="header">BIN/IIN</string>
     <string name="card_scheme">SCHEME / NETWORK</string>
