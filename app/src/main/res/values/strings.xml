@@ -2,6 +2,9 @@
     <string name="app_name">CftTestTask</string>
 
     <string name="enter_bin">Enter card BIN / IIN</string>
+    <string name="fill_search_input">Please fill search input</string>
+
+    <string name="clear_list">Clear history list</string>
 
     <string name="header">BIN/IIN</string>
     <string name="card_scheme">SCHEME / NETWORK</string>

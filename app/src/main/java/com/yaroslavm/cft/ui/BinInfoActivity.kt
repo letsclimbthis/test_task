@@ -1,24 +1,19 @@
 package com.yaroslavm.cft.ui
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.*
 import com.yaroslavm.cft.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BinInfoActivity: AppCompatActivity() {
 
+    @SuppressLint("UseSupportActionBar")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.bin_info_activity)
-//        val binding = BinInfoActivityBinding.inflate(layoutInflater)
-//        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 }
-
-
-/*
-TODO:
-- save history
-- response with code 40* exception
-*/

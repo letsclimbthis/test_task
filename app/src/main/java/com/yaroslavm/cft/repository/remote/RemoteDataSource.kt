@@ -1,7 +1,9 @@
 package com.yaroslavm.cft.repository.remote
 
-import kotlinx.coroutines.flow.Flow
-
-interface RemoteDataSource<I,O> {
-    suspend fun get(entity: I): O
+interface RemoteDataSource<K,O,I> {
+    suspend fun get(key: K): O
+    suspend fun getAll(): List<O>
+    suspend fun saveAll(list: List<I>)
+    suspend fun delete(key: K): Boolean
+    suspend fun deleteAll(): Boolean
 }

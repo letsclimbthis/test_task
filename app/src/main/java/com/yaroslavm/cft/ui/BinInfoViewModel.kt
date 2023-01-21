@@ -1,14 +1,12 @@
 package com.yaroslavm.cft.ui
 
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.yaroslavm.cft.BinRequest
-import com.yaroslavm.cft.repository.remote.BinlistResponse
+import androidx.lifecycle.*
+import com.yaroslavm.cft.ui.request.BinRequest
 import com.yaroslavm.cft.repository.Repository
+import com.yaroslavm.cft.ui.response.BinResponse
+import com.yaroslavm.cft.repository.remote.HttpResponse
+import com.yaroslavm.cft.ui.request.BinInfoRequestFragmentEvent
 import com.yaroslavm.cft.ui.request.BinInfoRequestUiState
-import com.yaroslavm.cft.ui.response.BinInfoResponseFragment
 import com.yaroslavm.cft.ui.response.BinInfoResponseFragmentEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -21,8 +19,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BinInfoViewModel @Inject constructor(
-    private val binRequestInfoRepository: Repository<BinRequest, BinlistResponse>
-    ): ViewModel(), DefaultLifecycleObserver {
+    private val binInfoResponseRepository: Repository<BinRequest, HttpResponse, Unit>,
+    private val binRequestHistoryRepository: Repository<Unit, BinRequest, BinRequest>,
+    ):
+    ViewModel()
+{
 
     private val _binInfoRequestUiStateFlow = MutableStateFlow<BinInfoRequestUiState>(
         BinInfoRequestUiState.Initial)
@@ -34,22 +35,63 @@ class BinInfoViewModel @Inject constructor(
     private val _historyList = mutableListOf<BinRequest>()
     val historyList: MutableList<BinRequest> = Collections.unmodifiableList(_historyList)
 
-    private var fetchBinInfo: Job? = null
+    private var binInfoIO: Job? = null
 
     fun fetchBinInfo(cardBin: String) {
-
         _historyList.add(BinRequest(cardBin, System.currentTimeMillis()))
+        _binInfoRequestUiStateFlow.update { BinInfoRequestUiState.BinInfoLoading }
 
-        _binInfoRequestUiStateFlow.value = BinInfoRequestUiState.BinInfoLoading
+        binInfoIO?.cancel()
+        binInfoIO = viewModelScope.launch(Dispatchers.IO) {
 
-        fetchBinInfo?.cancel()
-        fetchBinInfo = viewModelScope.launch {
+            val binlistRequest = BinRequest(cardBin, System.currentTimeMillis())
+            _binRequestFlow.update { binlistRequest }
+
+            when(val response = binInfoResponseRepository.get(binlistRequest)) {
+
+                is HttpResponse.Success<*> -> {
+                    _binInfoRequestUiStateFlow.update {
+                        BinInfoRequestUiState.BinInfoLoaded(response.value as BinResponse)
+                    }
+                }
+
+                is HttpResponse.Error<*> -> {
+                    _binInfoRequestUiStateFlow.update {
+                        BinInfoRequestUiState.Error((response.value as java.lang.Exception).toString())
+                    }
+                }
+
+            }
+        }
+    }
+
+    private var requestHistoryIO: Job? = null
+
+    fun fetchRecentBinRequest() {
+        requestHistoryIO?.cancel()
+        requestHistoryIO = viewModelScope.launch() {
             try {
-                val binlistRequest = BinRequest(cardBin, System.currentTimeMillis())
-                _binRequestFlow.update { binlistRequest }
+                val itemList = binRequestHistoryRepository.getAll()
+                if(itemList.isNotEmpty()) {
+                    _historyList.clear()
+                    _historyList.addAll(itemList)
+                    _binInfoRequestUiStateFlow.update {
+                        BinInfoRequestUiState.HistoryListChanged
+                    }
+                }
+            } catch (ioe: IOException) {
+                _binInfoRequestUiStateFlow.update { BinInfoRequestUiState.Error(ioe.message!!) }
+            }
+        }
+    }
 
-                val binlistResponse = binRequestInfoRepository.get(binlistRequest)
-                _binInfoRequestUiStateFlow.update { BinInfoRequestUiState.BinInfoLoaded(binlistResponse) }
+    fun saveRecentBinRequest() {
+        requestHistoryIO?.cancel()
+        requestHistoryIO = viewModelScope.launch(Dispatchers.IO) {
+            try {
+                binRequestHistoryRepository.saveAll(_historyList
+//                    .apply { clear() }
+                )
 
             } catch (ioe: IOException) {
                 _binInfoRequestUiStateFlow.update { BinInfoRequestUiState.Error(ioe.message!!) }
@@ -57,31 +99,11 @@ class BinInfoViewModel @Inject constructor(
         }
     }
 
-    fun fetchRecentBinRequest() {
-        val itemList = listOf<BinRequest>(
-            BinRequest("45717360", 1674147600000),
-
-//            BinEntity("123456"),
-//            BinEntity("654321"),
-//            BinEntity("123456"),
-//            BinEntity("654321"),
-//            BinEntity("123456"),
-//            BinEntity("654321"),
-//            BinEntity("123456"),
-//            BinEntity("654321"),
-        )
-
-
-//        _binHistoryRequestsFlow.update { it.apply { addAll(itemList) } }
-
-    }
-
-    override fun onStop(owner: LifecycleOwner) {
-        super.onStop(owner)
-        when (owner) {
-            is BinInfoResponseFragment ->
-                _binInfoRequestUiStateFlow.value = BinInfoRequestUiState.Initial
-        }
+    fun clearRecentBinRequest() {
+        _historyList.clear()
+        _binInfoRequestUiStateFlow.update {
+            BinInfoRequestUiState.HistoryListChanged
+            BinInfoRequestUiState.Initial}
     }
 
     fun onResponseFragmentEvent(event: BinInfoResponseFragmentEvent) {
@@ -91,8 +113,11 @@ class BinInfoViewModel @Inject constructor(
         }
     }
 
-//    fun updateBinEntity(cardNumber: String) {
-//        _binEntityStateFlow.value = BinEntity(cardNumber)
-//    }
+    fun onRequestFragmentEvent(event: BinInfoRequestFragmentEvent) {
+        when(event) {
+            is BinInfoRequestFragmentEvent.ErrorResponseConsumed ->
+                _binInfoRequestUiStateFlow.value = BinInfoRequestUiState.Initial
+        }
+    }
 
 }

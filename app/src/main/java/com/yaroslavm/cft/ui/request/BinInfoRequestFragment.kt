@@ -1,9 +1,19 @@
 package com.yaroslavm.cft.ui.request
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.*
+import android.util.Log
+import android.view.View
+import android.view.MenuInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.ViewGroup
+import android.view.LayoutInflater
 import android.view.View.OnClickListener
 import android.widget.EditText
+import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -25,6 +35,7 @@ class BinInfoRequestFragment:
 
     private val binInfoViewModel: BinInfoViewModel by activityViewModels()
     private lateinit var binding: BinInfoRequestFragmentBinding
+    private val self = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +47,7 @@ class BinInfoRequestFragment:
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.bin_info_request_fragment,
@@ -51,16 +63,9 @@ class BinInfoRequestFragment:
         setViewComponents()
     }
 
-    override fun onStart() {
-        super.onStart()
-        binding
-            .recyclerViewRequestHistory
-            .adapter
-            ?.notifyItemInserted(binInfoViewModel.historyList.size - 1)
-    }
-
     private fun setViewComponents() {
         val clickHandler = this
+
         binding.recyclerViewRequestHistory.apply {
             layoutManager = LinearLayoutManager(
                 requireContext(),
@@ -69,16 +74,35 @@ class BinInfoRequestFragment:
             )
             adapter = AdapterSearchHistory(binInfoViewModel.historyList, clickHandler)
         }
+        binInfoViewModel.fetchRecentBinRequest()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onClick(p0: View?) {
+
         when (p0?.tag) {
-            "request_fragment_button_send_request" -> {
+            "button_send_request" -> {
                 val cardNumber =
                     requireView().
                     findViewById<EditText>(R.id.enter_bin_edit_text).
                     text.toString()
-                binInfoViewModel.fetchBinInfo(cardNumber)            }
+
+                if (cardNumber != "") {
+                    binInfoViewModel.fetchBinInfo(cardNumber)
+                } else {
+                    makeToast(resources.getString(R.string.fill_search_input))
+                }
+
+            }
+
+            "delete" -> {
+                binInfoViewModel.clearRecentBinRequest()
+                binding.
+                recyclerViewRequestHistory.
+                adapter?.
+                notifyDataSetChanged()
+
+            }
         }
     }
 
@@ -87,18 +111,25 @@ class BinInfoRequestFragment:
         binding.enterBinEditText.setText(cardNumber.value)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun enableListeningBinInfoUiStateChanged() {
         val navController = findNavController(this)
         lifecycleScope.launch {
             binInfoViewModel.binInfoRequestUiStateFlow.collect {
                 when (it) {
 
-                    is BinInfoRequestUiState.Initial -> { }
+                    is BinInfoRequestUiState.Initial -> {
+                        if (self::binding.isInitialized)
+                            binding.apply {
+                                progressBar.visibility = View.GONE
+                                buttonSendRequest.visibility = View.VISIBLE
+                                recyclerViewRequestHistory.visibility = View.VISIBLE
+                            }
+                    }
 
                     is BinInfoRequestUiState.BinInfoLoading -> {
                         binding.apply {
                             progressBar.visibility = View.VISIBLE
-//                            requestFragmentEditTextEnterBin.visibility = View.GONE
                             buttonSendRequest.visibility = View.GONE
                             recyclerViewRequestHistory.visibility = View.GONE
                         }
@@ -108,70 +139,36 @@ class BinInfoRequestFragment:
                         navController.navigate(R.id.action_bin_info_request_fragment_to_bin_info_response_fragment)
                     }
 
-                    is BinInfoRequestUiState.HistoryListItemAdded -> {
-                        binding.
-                        recyclerViewRequestHistory.
-                        adapter?.
-                        notifyItemInserted(it.data)
+                    is BinInfoRequestUiState.HistoryListChanged -> {
+                        if (self::binding.isInitialized) {
+                            binding.
+                            recyclerViewRequestHistory.
+                            adapter?.
+                            notifyDataSetChanged()
+                        }
                     }
 
-                    is BinInfoRequestUiState.HistoryListItemDeleted -> {
-                        binding.
-                       recyclerViewRequestHistory.
-                        adapter?.
-                        notifyItemRemoved(it.data)
+                    is BinInfoRequestUiState.Error -> {
+                        makeToast(it.message)
+                        binInfoViewModel.onRequestFragmentEvent(BinInfoRequestFragmentEvent.ErrorResponseConsumed)
                     }
-
-                    is BinInfoRequestUiState.Error -> { }
                 }
             }
         }
+
     }
 
-//    private fun enableListeningBinInfoUiStateChanged() {
-//        val navController = findNavController(this)
-//        lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) { // deleted line
-//                binInfoViewModel.binInfoRequestUiStateFlow.collect {
-//                    when (it) {
-//
-//                        is BinInfoRequestUiState.Initial -> { }
-//
-//                        is BinInfoRequestUiState.BinInfoLoading -> {
-//                            binding.apply {
-//                                requestFragmentProgressBar.visibility = View.VISIBLE
-//                                requestFragmentEditTextEnterBin.visibility = View.GONE
-//                                requestFragmentButtonSendRequest.visibility = View.GONE
-//                                requestFragmentRecyclerViewRequestHistory.visibility = View.GONE
-//                            }
-//                        }
-//
-//                        is BinInfoRequestUiState.BinInfoLoaded -> {
-//                            navController.navigate(R.id.action_bin_info_request_fragment_to_bin_info_response_fragment)
-//                        }
-//
-//                        is BinInfoRequestUiState.HistoryListItemAdded -> { }
-//
-//                        is BinInfoRequestUiState.HistoryListItemDeleted -> { }
-//
-//                        is BinInfoRequestUiState.Error -> { }
-//                    }
-//                }
-//            }
-//        }
-//    }
+    private fun makeToast(msg: String) {
+        Toast.makeText(
+            requireContext(),
+            msg,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 
-
-//    private fun subscribeOnBinResponseHistoryChanged() {
-//        lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                binInfoViewModel.binHistoryRequestsFlow.collect {
-//                    binding.binRequest = it
-//                }
-//            }
-//        }
-//    }
-//
-
+    override fun onStop() {
+        super.onStop()
+        binInfoViewModel.saveRecentBinRequest()
+    }
 
 }

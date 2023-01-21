@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -9,15 +8,19 @@
             type="com.yaroslavm.cft.ui.request.BinInfoRequestFragment" />
         <variable
             name="binEntity"
-            type="com.yaroslavm.cft.BinRequest" />
+            type="com.yaroslavm.cft.ui.request.BinRequest" />
     </data>
 
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/color_on_primary"
+
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -91,23 +94,23 @@
             </androidx.cardview.widget.CardView>
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_between_items"
+                android:layout_marginBottom="@dimen/spacing_mxxlarge"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/search_bar"
-                android:layout_marginTop="@dimen/spacing_between_items"
-                android:layout_marginBottom="@dimen/spacing_mxxlarge">
+                app:layout_constraintTop_toBottomOf="@+id/search_bar">
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/button_send_request"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:tag="button_send_request"
+                    style="@style/floating_action_button_search"
                     android:clickable="true"
+                    android:focusable="true"
                     android:onClick="@{clickHandler::onClick}"
-                    android:tag="request_fragment_button_send_request"
-                    app:tint="@color/color_primary"
                     app:backgroundTint="@android:color/white"
                     app:elevation="6dp"
                     app:fabSize="normal"
@@ -117,8 +120,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/search_bar"
                     app:rippleColor="@android:color/white"
                     app:srcCompat="@drawable/ic_search"
-                    android:focusable="true"
-                    />
+                    app:tint="@color/color_primary" />
 
                 <ProgressBar
                     android:id="@+id/progress_bar"
@@ -128,10 +130,23 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/delete"
+                android:tag="delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLength="2"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_delete"
+                android:onClick="@{clickHandler::onClick}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:tint="@android:color/white"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -148,4 +163,5 @@
                 />
 
     </LinearLayout>
+    </ScrollView>
 </layout>

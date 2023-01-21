@@ -7,14 +7,14 @@
     <data>
         <variable
             name="response"
-            type="com.yaroslavm.cft.repository.remote.BinlistResponse"
+            type="com.yaroslavm.cft.ui.response.BinResponse"
             />
         <variable
             name="clickHandler"
             type="android.view.View.OnClickListener" />
         <variable
             name="binRequest"
-            type="com.yaroslavm.cft.BinRequest" />
+            type="com.yaroslavm.cft.ui.request.BinRequest" />
     </data>
 
     <ScrollView

@@ -12,7 +12,9 @@ fun capitalizeString(string: String?): String {
 }
 
 @BindingConversion
-fun convertBooleanToYesOrNo(bool: Boolean) = run { if (bool) "Yes" else "No" }
+fun convertBooleanToYesOrNo(bool: Boolean?) = run {
+    bool?.let { if (it) "Yes" else "No" } ?: "-"
+}
 
 @BindingConversion
 fun millisecondsToDate(milliseconds: Long): String {
