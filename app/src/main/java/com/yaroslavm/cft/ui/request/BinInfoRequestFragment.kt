@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yaroslavm.cft.R
 import com.yaroslavm.cft.databinding.BinInfoRequestFragmentBinding
@@ -136,7 +137,8 @@ class BinInfoRequestFragment:
                     }
 
                     is BinInfoRequestUiState.BinInfoLoaded -> {
-                        navController.navigate(R.id.action_bin_info_request_fragment_to_bin_info_response_fragment)
+                        if(navController.currentDestination == navController.graph[R.id.bin_info_request_fragment])
+                            navController.navigate(R.id.action_bin_info_request_fragment_to_bin_info_response_fragment)
                     }
 
                     is BinInfoRequestUiState.HistoryListChanged -> {

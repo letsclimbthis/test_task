@@ -13,7 +13,7 @@ data class BinResponse(
 ) {
 
     data class Number(
-        @SerializedName("length") var length: Double? = null,
+        @SerializedName("length") var length: Int? = null,
         @SerializedName("luhn") var luhn: Boolean? = null,
     )
 
